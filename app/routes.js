@@ -8,7 +8,7 @@ const axios = require('axios');
 require('dotenv').config();
 
 // Route pour effectuer une requête HTTP sortante avec un token dans les en-têtes
-router.get('/api', async (req, res) => {
+router.get('/api/pins', async (req, res) => {
     try {
         console.log("******************* process.env.TOKEN : " + process.env.TOKEN)
         // Replace 'YOUR_API_KEY' with your Airtable API key
