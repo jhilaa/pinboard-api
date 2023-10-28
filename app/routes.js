@@ -2,10 +2,10 @@ require('dotenv').config();
 var http = require('http');
 var https = require('https');
 var express = require('express');
-const cors = require('cors');
 const router = express.Router();
 const axios = require('axios');
 require('dotenv').config();
+
 
 // Route pour effectuer une requête HTTP sortante avec un token dans les en-têtes
 router.get('/api/pins', async (req, res) => {
@@ -32,6 +32,8 @@ router.get('/api/pins', async (req, res) => {
 router.get('/api/tags', async (req, res) => {
     console.log ("=========== process.env.API_URL ===========")
     console.log (process.env.API_URL);
+    console.log ("------------------------");
+    console.log (req.headers);
     console.log ("=========================");
     try {
         const apiKey = process.env.API_TOKEN;
