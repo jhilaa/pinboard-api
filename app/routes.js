@@ -10,8 +10,8 @@ require('dotenv').config();
 // Route pour effectuer une requête HTTP sortante avec un token dans les en-têtes
 router.get('/api/pins', async (req, res) => {
     try {
-        const apiKey = process.env.TOKEN;
-        const baseUrl = process.env.HOSTNAME + process.env.PATH + "/pins";
+        const apiKey = process.env.API_TOKEN;
+        const baseUrl = process.env.API_URL + "/pins";
         const config = {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
@@ -30,9 +30,12 @@ router.get('/api/pins', async (req, res) => {
 });
 
 router.get('/api/tags', async (req, res) => {
+    console.log ("=========== process.env.API_URL ===========")
+    console.log (process.env.API_URL);
+    console.log ("=========================");
     try {
-        const apiKey = process.env.TOKEN;
-        const baseUrl = process.env.HOSTNAME + process.env.PATH + "/tags";
+        const apiKey = process.env.API_TOKEN;
+        const baseUrl = process.env.API_URL + "/tags";
         const config = {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
