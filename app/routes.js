@@ -11,7 +11,7 @@ require('dotenv').config();
 router.get('/api/pins', async (req, res) => {
     try {
         const apiKey = process.env.TOKEN;
-        const baseUrl = process.env.PATH;
+        const baseUrl = process.env.HOSTNAME + process.env.PATH + "/pins";
         const config = {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
@@ -32,7 +32,7 @@ router.get('/api/pins', async (req, res) => {
 router.get('/api/tags', async (req, res) => {
     try {
         const apiKey = process.env.TOKEN;
-        const baseUrl = process.env.HOSTNAME;
+        const baseUrl = process.env.HOSTNAME + process.env.PATH + "/tags";
         const config = {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
