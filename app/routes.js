@@ -11,7 +11,7 @@ require('dotenv').config();
 router.get('/api/pins', async (req, res) => {
     try {
         const apiKey = process.env.TOKEN;
-        const baseUrl = 'https://api.airtable.com/v0/app7zNJoX11DY99UA/Pins';
+        const baseUrl = process.env.PATH;
         const config = {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
@@ -32,7 +32,7 @@ router.get('/api/pins', async (req, res) => {
 router.get('/api/tags', async (req, res) => {
     try {
         const apiKey = process.env.TOKEN;
-        const baseUrl = 'https://api.airtable.com/v0/app7zNJoX11DY99UA/Tags';
+        const baseUrl = process.env.HOSTNAME;
         const config = {
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
