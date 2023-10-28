@@ -29,6 +29,27 @@ router.get('/api/pins', async (req, res) => {
     }
 });
 
+router.get('/api/tags', async (req, res) => {
+    try {
+        const apiKey = process.env.TOKEN;
+        const baseUrl = 'https://api.airtable.com/v0/app7zNJoX11DY99UA/Tags';
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+            },
+        };
+
+        // Make an HTTP GET request to Airtable
+        const response = await axios.get(baseUrl, config);
+
+        // Send the Airtable data as the response to the client
+        res.status(response.status).json(response.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({error: 'Error fetching data from Airtable'});
+    }
+});
+
 module.exports = router;
 
 
