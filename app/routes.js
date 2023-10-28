@@ -10,9 +10,7 @@ require('dotenv').config();
 // Route pour effectuer une requête HTTP sortante avec un token dans les en-têtes
 router.get('/api/pins', async (req, res) => {
     try {
-        console.log("******************* process.env.TOKEN : " + process.env.TOKEN)
-        // Replace 'YOUR_API_KEY' with your Airtable API key
-        const apiKey = /*process.env.TOKEN;*/ 'pateoiLGxeeOa1bbO.7d97dd01a0d5282f7e4d3b5fff9c9e10d2023d3a34b1811e1152a97182c2238d';
+        const apiKey = process.env.TOKEN;
         const baseUrl = 'https://api.airtable.com/v0/app7zNJoX11DY99UA/Pins';
         const config = {
             headers: {
