@@ -11,7 +11,8 @@ const cors = require('cors');
 
 const allowedOrigins = ['https://www.imelmi.net'];
 const corsOptions = {
-    origin: function (origin, callback) {
+    //origin: function (origin, callback) {
+    "Access-Control-Allow-Origin": function (origin, callback) {
         if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
             callback(null, true);
         } else {
