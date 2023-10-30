@@ -1,26 +1,7 @@
 require('dotenv').config();
-var http = require('http');
-var https = require('https');
 var express = require('express');
 const router = express.Router();
 const axios = require('axios');
-require('dotenv').config();
-
-const app = express();
-const cors = require('cors');
-
-const allowedOrigins = ['https://www.imelmi.net'];
-const corsOptions = {
-    //origin: function (origin, callback) {
-    "Access-Control-Allow-Origin": function (origin, callback) {
-        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-};
-app.use(cors(corsOptions));
 
 // Route pour effectuer une requête HTTP sortante avec un token dans les en-têtes
 router.get('/api/pins', async (req, res) => {
