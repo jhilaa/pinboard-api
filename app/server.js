@@ -1,16 +1,14 @@
 const express = require('express');
-const routes = require('./routes');
 const cors = require('cors');
-const axios = require("axios");
+const axios = require('axios');
 const app = express();
 
-// Middleware pour traiter les requêtes entrantes
+// Middleware
 app.use(express.json());
-app.use("/", routes);
 app.use(cors());
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*'); // Replace '*' with the specific origins you want to allow.
+  res.setHeader('Access-Control-Allow-Origin', '*'); // '*' for the 1st tests.
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
@@ -27,33 +25,33 @@ const config = {
 
 app.get('/api/pins',  cors (), async (req, res) => {
   try {
-    // Make an HTTP GET request to Airtable
+    // Make an HTTP GET request to the back-end
     const response = await axios.get(baseUrl+ "/pins", config);
-    // Send the Airtable data as the response to the client
+    // Send the data as the response to the client
     res.status(response.status).json(response.data);
   } catch (error) {
     console.error(error);
-    res.status(500).json({error: 'Error fetching data from Airtable'});
+    res.status(500).json({error: 'Error fetching data'});
   }
 });
 
 app.get('/api/tags', cors (), async (req, res) => {
   try {
-    // Make an HTTP GET request to Airtable
+    // Make an HTTP GET request to the back-end
     const response = await axios.get(baseUrl+ "/tags", config);
 
-    // Send the Airtable data as the response to the client
+    // Send the data as the response to the client
     res.status(response.status).json(response.data);
   } catch (error) {
     console.error(error);
-    res.status(500).json({error: 'Error fetching data from Airtable'});
+    res.status(500).json({error: 'Error fetching data'});
   }
 });
 
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
+  console.log(`Server live on port ${PORT}`);
 });
 
 
