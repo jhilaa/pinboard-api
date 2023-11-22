@@ -66,7 +66,7 @@ app.get('/api/domain/:domain/pins',  cors (), async (req, res) => {
   try {
     const domainName = req.params.domain;
     // Make an HTTP GET request to the back-end
-    const getUrl = encodeURIComponent(baseUrl+ "/pins?filterByFormula=(domain=\""+domainName+"\")");
+    const getUrl = encodeURIComponent(baseUrl+ "/pins?filterByFormula=AND({domain}=\""+domainName+"\")");
     const response = await axios.get(getUrl, config);
     //https://api.airtable.com/v0/app7zNJoX11DY99UA/Tags?filterByFormula=AND({domain}="Maths")
     // Send the data as the response to the client
@@ -81,7 +81,7 @@ app.get('/api/domain/:domain/tags',  cors (), async (req, res) => {
   try {
     const domainName = req.params.domain;
     // Make an HTTP GET request to the back-end
-    const getUrl = encodeURIComponent(baseUrl+ "/tags?filterByFormula=(domain=\""+domainName+"\")");
+    const getUrl = encodeURIComponent(baseUrl+ "/tags?filterByFormula=AND({domain}=\""+domainName+"\")");
     const response = await axios.get(getUrl, config);
     //https://api.airtable.com/v0/app7zNJoX11DY99UA/Tags?filterByFormula=AND({domain}="Maths")
         // Send the data as the response to the client
