@@ -49,7 +49,7 @@ app.get('/api/tags', cors (), async (req, res) => {
   }
 });
 
-app.get('/api/domains', cors (), async (req, res) => {
+app.get('/api/domains/all', cors (), async (req, res) => {
   try {
     // Make an HTTP GET request to the back-end
     const response = await axios.get(baseUrl+ "/domains", config);
@@ -61,20 +61,6 @@ app.get('/api/domains', cors (), async (req, res) => {
     res.status(500).json({error: 'Error fetching data'});
   }
 });
-
-app.get('/api/domain/id/:domainId/',  cors (), async (req, res) => {
-  try {
-    const domainId = req.params.domainId;
-    // Make an HTTP GET request to the back-end
-    const response = await axios.get(baseUrl+ "/domains/"+domainId, config);
-    // Send the data as the response to the client
-    res.status(response.status).json(response.data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({error: 'Error fetching data'});
-  }
-});
-
 
 app.get('/api/domain/:domain_name/pins',  cors (), async (req, res) => {
   try {
