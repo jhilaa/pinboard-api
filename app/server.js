@@ -62,12 +62,25 @@ app.get('/api/domains/all', cors (), async (req, res) => {
   }
 });
 
+app.get('/api/tags/all', cors (), async (req, res) => {
+  try {
+    // Make an HTTP GET request to the back-end
+    const response = await axios.get(baseUrl+ "/tags", config);
+
+    // Send the data as the response to the client
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({error: 'Error fetching data'});
+  }
+});
+
 app.get('/api/domain/:domain_name/pins',  cors (), async (req, res) => {
   try {
     const domainName = req.params.domain_name;
     // Make an HTTP GET request to the back-end
-    const response = await axios.get(baseUrl+ "/pins?filterByFormula=(domain=\""+domainName+"\")", config);
-    https://api.airtable.com/v0/app7zNJoX11DY99UA/Tags?filterByFormula=AND({domain}="Maths")
+    //const response = await axios.get(baseUrl+ "/pins?filterByFormula=(domain=\""+domainName+"\")", config);
+    const response = await axios.get(baseUrl+"/tags?filterByFormula=(domain=\"Test accentué\")", config);
     // Send the data as the response to the client
     res.status(response.status).json(response.data);
   } catch (error) {
