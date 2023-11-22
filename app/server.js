@@ -62,7 +62,7 @@ app.get('/api/domains', cors (), async (req, res) => {
   }
 });
 
-app.get('/api/domain/:domainId/',  cors (), async (req, res) => {
+app.get('/api/domain/id/:domainId/',  cors (), async (req, res) => {
   try {
     const domainId = req.params.domainId;
     // Make an HTTP GET request to the back-end
