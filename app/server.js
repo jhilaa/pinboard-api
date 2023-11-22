@@ -75,9 +75,9 @@ app.get('/api/tags/all', cors (), async (req, res) => {
   }
 });
 
-app.get('/api/domain/:domain_name/pins',  cors (), async (req, res) => {
+app.get('/api/domain/:domain/pins',  cors (), async (req, res) => {
   try {
-    const domainName = req.params.domain_name;
+    const domainName = req.params.domain;
     // Make an HTTP GET request to the back-end
     //const response = await axios.get(baseUrl+ "/pins?filterByFormula=(domain=\""+domainName+"\")", config);
     const response = await axios.get(baseUrl+"/tags?filterByFormula=(domain=\"Test accentué\")", config);
@@ -89,12 +89,13 @@ app.get('/api/domain/:domain_name/pins',  cors (), async (req, res) => {
   }
 });
 
-app.get('/api/domain/:domain_name/tags',  cors (), async (req, res) => {
+app.get('/api/domain/:domain/tags',  cors (), async (req, res) => {
   try {
-    const domainName = req.params.domain_name;
+    const domainName = req.params.domain;
     // Make an HTTP GET request to the back-end
-    const response = await axios.get(baseUrl+ "/tags?filterByFormula=(domain=\""+domainName+"\")", config);
-    https://api.airtable.com/v0/app7zNJoX11DY99UA/Tags?filterByFormula=AND({domain}="Maths")
+    const getUrl = encodeURIComponent(baseUrl+ "/tags?filterByFormula=(domain=\""+domainName+"\")");
+    const response = await axios.get(getUrl, config);
+    //https://api.airtable.com/v0/app7zNJoX11DY99UA/Tags?filterByFormula=AND({domain}="Maths")
         // Send the data as the response to the client
         res.status(response.status).json(response.data);
   } catch (error) {
