@@ -25,6 +25,7 @@ const config = {
 };
 
 app.get('/api/pin/all',  cors (), async (req, res) => {
+  console.log ("-- /api/pin/all -------")
   try {
     // Make an HTTP GET request to the back-end
     const response = await axios.get(baseUrl+ "/pins", config);
@@ -37,6 +38,7 @@ app.get('/api/pin/all',  cors (), async (req, res) => {
 });
 
 app.get('/api/tag/all', cors (), async (req, res) => {
+  console.log ("-- /api/tag/all -------")
   try {
     // Make an HTTP GET request to the back-end
     const response = await axios.get(baseUrl+ "/tags", config);
@@ -51,6 +53,7 @@ app.get('/api/tag/all', cors (), async (req, res) => {
 
 app.get('/api/domain/all', cors (), async (req, res) => {
   try {
+    console.log ("-- /api/domain/all -------")
     // Make an HTTP GET request to the back-end
     const response = await axios.get(baseUrl+ "/domains", config);
 
@@ -66,14 +69,8 @@ app.get('/api/domain/:domain/pins',  cors (), async (req, res) => {
   try {
     const domainName = req.params.domain;
     // Make an HTTP GET request to the back-end
-    console.log("++++++++++++++++++++++++++");
-    console.log(baseUrl+ "/pins?filterByFormula=AND({domain}=\""+domainName+"\")");
-
-    const getUrl = encodeURIComponent(baseUrl+ "/pins?filterByFormula=AND({domain}=\""+domainName+"\")");
+    const getUrl = baseUrl+ "/pins?filterByFormula=AND({domain}=\""+domainName+"\")";
     const response = await axios.get(getUrl, config);
-    console.log("--------------------------");
-    console.log(getUrl);
-    //https://api.airtable.com/v0/app7zNJoX11DY99UA/Tags?filterByFormula=AND({domain}="Maths")
     // Send the data as the response to the client
     res.status(response.status).json(response.data);
   } catch (error) {
@@ -86,9 +83,8 @@ app.get('/api/domain/:domain/tags',  cors (), async (req, res) => {
   try {
     const domainName = req.params.domain;
     // Make an HTTP GET request to the back-end
-    const getUrl = encodeURIComponent(baseUrl+ "/tags?filterByFormula=AND({domain}=\""+domainName+"\")");
+    const getUrl =baseUrl+ "/tags?filterByFormula=AND({domain}=\""+domainName+"\")";
     const response = await axios.get(getUrl, config);
-    //https://api.airtable.com/v0/app7zNJoX11DY99UA/Tags?filterByFormula=AND({domain}="Maths")
         // Send the data as the response to the client
         res.status(response.status).json(response.data);
   } catch (error) {
