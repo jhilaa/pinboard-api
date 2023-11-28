@@ -3,9 +3,13 @@ const cors = require('cors');
 const axios = require('axios');
 const app = express();
 require('dotenv').config();
+const { router } = require("./routes/auth");
+
+console.log ("-- test -------")
 
 // Middleware
 app.use(express.json());
+app.use('/auth', router);
 app.use(cors());
 
 app.use((req, res, next) => {
@@ -24,6 +28,16 @@ const config = {
   },
 };
 
+
+router.post("/token", (req, res) => {
+  const { refreshToken } = req.body;
+  const user = users.find((u) => u.refreshToken === refreshToken);
+  if (!user) {
+    return res.status(403).json({ message: "Invalid refresh token" });
+  }
+  //...
+});
+
 app.get('/api/pin/all',  cors (), async (req, res) => {
   console.log ("-- /api/pin/all -------")
   try {
@@ -38,7 +52,7 @@ app.get('/api/pin/all',  cors (), async (req, res) => {
 });
 
 app.get('/api/tag/all', cors (), async (req, res) => {
-  console.log ("-- /api/tag/all -------")
+  console.log ("-- /api/tag/all _-------")
   try {
     // Make an HTTP GET request to the back-end
     const response = await axios.get(baseUrl+ "/tags", config);
