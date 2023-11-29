@@ -11,6 +11,7 @@ const opts = {
 module.exports = passport => {
     passport.use(
         new JwtStrategy(opts, (jwt_payload, done) => {
+            // requete vers le back à partir du cookie
             const user = users.find(u => u.username === jwt_payload.username);
 
             if (user) {

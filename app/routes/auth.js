@@ -6,6 +6,30 @@ const crypto = require('crypto');
 
 const users = [];
 
+// Middleware pour extraire l'utilisateur du jeton JWT
+const extractUserMiddleware = (req, res, next) => {
+    const bearerToken = req.header('Authorization');
+    if (bearerToken.startsWith("Bearer ")) {
+        try {
+            const token = bearerToken.substring(7, bearerToken.length);
+            console.log("req.body ++++++++++++++++");
+            console.log(req.body);
+            console.log(process.env.JWT_SECRET);
+            console.log("token");
+            console.log(token);
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            req.user = decoded;
+            next();
+        } catch (error) {
+            console.error('Error decoding JWT:', error.message);
+            res.status(401).json({ message: 'Unauthorized' });
+        }
+    } else {
+        res.status(401).json({ message: 'Unauthorized' });
+    }
+    next();
+};
+
 router.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); // '*' for the 1st tests.
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -13,9 +37,10 @@ router.use((req, res, next) => {
     next();
 });
 
+
 router.post("/register", async (req, res) => {
     try {
-        console.log("/register");
+        console.log("** REGISTER **");
         const { username, password } = req.body;
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -31,6 +56,7 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+    console.log ("** LOGIN **")
     try {
         const { username, password } = req.body;
 
@@ -62,4 +88,8 @@ router.post("/login", async (req, res) => {
     }
 });
 
-module.exports = { router, users };
+
+// middleware d'extraction de l'utilisateur
+router.use(extractUserMiddleware);
+
+module.exports = { router, users , extractUserMiddleware};
