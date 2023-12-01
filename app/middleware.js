@@ -22,6 +22,15 @@ const extractUserMiddleware = (req, res, next) => {
     next();
 };
 
+// Exemple de middleware pour l'authentification basique
+const isAuthenticated = (req, res, next) => {
+    // Vérifiez si l'utilisateur est authentifié ici
+    if (req.user) {
+        // L'utilisateur est authentifié, continuez avec la requête
+        return next();
+    }
+}
+
 module.exports = {
-    extractUserMiddleware,
+    extractUserMiddleware, isAuthenticated
 };

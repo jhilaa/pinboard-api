@@ -4,8 +4,8 @@ const axios = require('axios');
 const app = express();
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
-const {router, users, extractUserMiddleware} = require("./routes/auth");
-//const { extractUserMiddleware } = require('./middleware');
+const {router, users, isAuthenticated} = require("./routes/auth");
+const { extractUserMiddleware } = require('./middleware');
 const passport = require('passport');
 const path = require("path");
 require('./passport-config')(passport);
@@ -18,6 +18,7 @@ app.use('/auth', router);
 app.use(passport.initialize());
 app.use(cors());
 app.use(cookieParser());  // Utilisation du middleware cookie-parser
+app.use(isAuthenticated);
 app.use(extractUserMiddleware);
 
 
@@ -39,21 +40,26 @@ const config = {
 };
 
 // Middleware pour gérer les erreurs 404
-/*
 app.use((req, res, next) => {
-    // Redirigez vers la page d'accueil si la route demandée n'existe pas
-    res.redirect('/accueil.html');
+    // Redirigez vers la page d'accueil ou de connexion si la route demandée n'existe pas
+    if (!res.headersSent) {
+        res.redirect(req.isAuthenticated() ? '/accueil.html' : '/login.html');
+    } else {
+        // Si les en-têtes ont déjà été envoyés, passez simplement au prochain middleware
+        next();
+    }
 });
- */
 
 
 app.get('/protected', passport.authenticate('jwt', {session: false}), (req, res) => {
+    console.log("protected");
     res.send('You have accessed a protected route!');
 });
 
 app.post("/token", (req, res) => {
+    console.log ("refresh token")
     const {refreshToken} = req.body;
-    const user = users.find((u) => u.refreshToken === refreshToken);
+    //const user = users.find((u) => u.refreshToken === refreshToken);
     if (!user) {
         return res.status(403).json({message: "Invalid refresh token"});
     }
@@ -123,15 +129,7 @@ app.get('/api/domain/:domain/pins', cors(), async (req, res) => {
     }
 });
 
-app.get('login', cors(), async (req, res) => {
-        try {
 
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({error: 'Error fetching data'});
-        }
-    }
-)
 app.get('/api/domain/:domain/tags', cors(), async (req, res) => {
     try {
         const domainName = req.params.domain;
@@ -146,8 +144,11 @@ app.get('/api/domain/:domain/tags', cors(), async (req, res) => {
     }
 });
 
+
 // Utiliser l'objet users dans une route
 app.get('/api/user', (req, res) => {
+    console.log ("req.user");
+    console.log (req.user);
     const user = req.user;
     res.json(user);
 });
@@ -158,7 +159,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Middleware pour gérer les erreurs 404
 app.use((req, res, next) => {
     // Redirigez vers la page d'accueil ou de connexion si la route demandée n'existe pas
-    res.redirect(req.isAuthenticated() ? '/accueil.html' : '/login.html');
+    if (!res.headersSent) {
+        res.redirect(req.isAuthenticated() ? '/accueil.html' : '/login.html');
+        return;
+    }
+    next();
 });
 
 const PORT = process.env.PORT || 3000;
