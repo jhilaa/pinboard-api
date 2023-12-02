@@ -4,8 +4,8 @@ const axios = require('axios');
 const app = express();
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
-const {router, users, extractUserMiddleware} = require("./routes/auth");
-//const { extractUserMiddleware } = require('./middleware');
+const {router, users} = require("./routes/auth");
+const { extractUserMiddleware } = require('./middleware');
 const passport = require('passport');
 const path = require("path");
 require('./passport-config')(passport);
@@ -29,7 +29,6 @@ app.use((req, res, next) => {
 });
 
 
-// Middleware de gestion des erreurs pour les routes qui n'existent pas
 const apiKey = process.env.API_TOKEN;
 const baseUrl = process.env.API_URL;
 const config = {
@@ -45,6 +44,14 @@ app.use((req, res, next) => {
     res.redirect('/accueil.html');
 });
  */
+
+// Utiliser l'objet users dans une route
+app.get('/api/user', (req, res) => {
+    console.log('-- user ---------')
+    console.log(req.user)
+    const user = req.user;
+    res.json(user);
+});
 
 
 app.get('/protected', passport.authenticate('jwt', {session: false}), (req, res) => {
@@ -146,11 +153,7 @@ app.get('/api/domain/:domain/tags', cors(), async (req, res) => {
     }
 });
 
-// Utiliser l'objet users dans une route
-app.get('/api/user', (req, res) => {
-    const user = req.user;
-    res.json(user);
-});
+
 
 // Middleware pour servir les fichiers statiques
 app.use(express.static(path.join(__dirname, 'public')));
