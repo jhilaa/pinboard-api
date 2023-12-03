@@ -47,13 +47,6 @@ app.get('/api/user', (req, res) => {
     res.json(user);
 });
 
-// Middleware pour gérer les erreurs 404
-app.use((req, res, next) => {
-    // Redirigez vers la page d'accueil si la route demandée n'existe pas
-    res.redirect('/accueil.html');
-});
-
-
 
 app.get('/protected', passport.authenticate('jwt', {session: false}), (req, res) => {
     res.send('You have accessed a protected route!');
@@ -159,10 +152,40 @@ app.get('/api/domain/:domain/tags', cors(), async (req, res) => {
 // Middleware pour servir les fichiers statiques
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Middleware pour gérer les erreurs 404
+/*
+// Middleware for handling 404 errors
 app.use((req, res, next) => {
-    // Redirigez vers la page d'accueil ou de connexion si la route demandée n'existe pas
-    res.redirect(req.isAuthenticated() ? '/accueil.html' : '/login.html');
+    // Redirect to login page if user is not authenticated
+    if (!req.user) {
+        return res.redirect('/login.html');
+    }
+
+    // Redirect to 404 error page for authenticated users if the route doesn't exist
+    res.redirect('/404.html');
+});
+
+// Middleware for handling errors
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
+});
+*/
+
+//-----------------
+// Middleware for handling errors and 404
+app.use((req, res, next) => {
+    // Send the 404.html file for authenticated users if the route doesn't exist
+    res.status(404).sendFile('404.html', { root: path.join(__dirname, 'public') });
+    // Redirect to login page if user is not authenticated
+    if (!req.user) {
+        return res.redirect('/login.html');
+    }
+});
+
+// Middleware for handling other errors
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
 });
 
 const PORT = process.env.PORT || 3000;
