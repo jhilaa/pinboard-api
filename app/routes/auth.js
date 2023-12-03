@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const crypto = require('crypto');
-const {extractUserMiddleware} = require("../middleware");
 
 const users = [];
 
@@ -66,7 +65,4 @@ router.post("/login", async (req, res) => {
 });
 
 
-// middleware d'extraction de l'utilisateur
-router.use(extractUserMiddleware);
-
-module.exports = { router, users , extractUserMiddleware};
+module.exports = { router, users};

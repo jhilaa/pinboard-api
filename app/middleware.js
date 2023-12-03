@@ -25,4 +25,5 @@ const extractUserMiddleware = (req, res, next) => {
     }
 };
 
+
 module.exports = { extractUserMiddleware};

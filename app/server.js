@@ -37,13 +37,7 @@ const config = {
     },
 };
 
-// Middleware pour gérer les erreurs 404
-/*
-app.use((req, res, next) => {
-    // Redirigez vers la page d'accueil si la route demandée n'existe pas
-    res.redirect('/accueil.html');
-});
- */
+
 
 // Utiliser l'objet users dans une route
 app.get('/api/user', (req, res) => {
@@ -52,6 +46,13 @@ app.get('/api/user', (req, res) => {
     const user = req.user;
     res.json(user);
 });
+
+// Middleware pour gérer les erreurs 404
+app.use((req, res, next) => {
+    // Redirigez vers la page d'accueil si la route demandée n'existe pas
+    res.redirect('/accueil.html');
+});
+
 
 
 app.get('/protected', passport.authenticate('jwt', {session: false}), (req, res) => {
