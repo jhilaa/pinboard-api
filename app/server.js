@@ -175,9 +175,11 @@ app.use((err, req, res, next) => {
 // Middleware for handling errors and 404
 app.use((req, res, next) => {
     // Send the 404.html file for authenticated users if the route doesn't exist
+    console.log("404");
     res.status(404).sendFile('404.html', { root: path.join(__dirname, 'public') });
     // Redirect to login page if user is not authenticated
     if (!req.user) {
+        console.log("redirect");
         return res.redirect('/login.html');
     }
 });
