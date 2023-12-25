@@ -187,7 +187,8 @@ app.get('/api/domain/:domain/groups', cors(), async (req, res) => {
     try {
         const domainName = req.params.domain;
         // Make an HTTP GET request to the back-end
-        const getUrl = baseUrl + "/groups?filterByFormula=(domain=\"" + domainName + "\")&sort%5B0%5D%5Bfield%5D=order&sort%5B0%5D%5Bdirection%5D=desc";
+        //const getUrl = baseUrl + "/groups?filterByFormula=(domain=\"" + domainName + "\")&sort%5B0%5D%5Bfield%5D=order&sort%5B0%5D%5Bdirection%5D=desc";
+        const getUrl = "https://api.airtable.com/v0/app7zNJoX11DY99UA/groups?filterByFormula=(domain=\"Maths\")&sort%5B0%5D%5Bfield%5D=order&sort%5B0%5D%5Bdirection%5D=desc"
         const response = await axios.get(getUrl, config);
         // Send the data as the response to the client
         res.status(response.status).json(response.data);
