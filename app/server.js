@@ -5,21 +5,58 @@ const app = express();
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const {router, users} = require("./routes/auth");
-const { extractUserMiddleware } = require('./middleware');
+const { extractUserMiddleware, test } = require('./middleware');
 const passport = require('passport');
 const path = require("path");
 require('./passport-config')(passport);
 
 console.log("-- test -------")
 
+
+// Middleware for handling errors and 404
+app.use((req, res, next) => {
+    return res.redirect('/login.html');
+});
 // Middleware
+//app.use('/routes/auth', router);
 app.use(express.json());
-app.use('/auth', router);
 app.use(passport.initialize());
 app.use(cors());
-app.use(cookieParser());  // Utilisation du middleware cookie-parser
+app.use(cookieParser());
+app.use(test);
 app.use(extractUserMiddleware);
 
+// List of routes that should be accessible without authentication
+const publicRoutes = ['/login', '/accueil', '/404', '/000'];
+
+
+
+
+/*
+app.use((req, res, next) => {
+    console.log('** Middleware Start **');
+    console.log('Requested URL:', req.url);
+    console.log('Public Routes:', publicRoutes);
+    console.log ("** TEST **")
+
+    // Check if the requested route is in the list of public routes
+    if (publicRoutes.includes(req.path)) {
+        return next(); // Allow access without authentication
+    }
+
+    console.log ("** req.user **")
+    console.log (req.user)
+    // Redirect to login page if user is not authenticated
+    //if (!req.user) {
+    if (true) {
+        console.log ("** REDIRECT **")
+        return res.redirect('/login.html');
+    }
+
+    // Send the 404.html file for authenticated users if the route doesn't exist
+    res.status(404).sendFile('000.html', { root: path.join(__dirname, 'public') });
+});
+*/
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); // '*' for the 1st tests.
@@ -36,7 +73,6 @@ const config = {
         'Authorization': `Bearer ${apiKey}`,
     },
 };
-
 
 
 // Utiliser l'objet users dans une route
@@ -147,48 +183,26 @@ app.get('/api/domain/:domain/tags', cors(), async (req, res) => {
     }
 });
 
+app.get('/api/domain/:domain/groups', cors(), async (req, res) => {
+    try {
+        const domainName = req.params.domain;
+        // Make an HTTP GET request to the back-end
+        const getUrl = baseUrl + "/groups?filterByFormula=(domain=\"" + domainName + "\")&sort%5B0%5D%5Bfield%5D=order&sort%5B0%5D%5Bdirection%5D=desc";
+        const response = await axios.get(getUrl, config);
+        // Send the data as the response to the client
+        res.status(response.status).json(response.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({error: 'Error fetching data'});
+    }
+});
 
 
 // Middleware pour servir les fichiers statiques
 app.use(express.static(path.join(__dirname, 'public')));
 
-/*
-// Middleware for handling 404 errors
-app.use((req, res, next) => {
-    // Redirect to login page if user is not authenticated
-    if (!req.user) {
-        return res.redirect('/login.html');
-    }
 
-    // Redirect to 404 error page for authenticated users if the route doesn't exist
-    res.redirect('/404.html');
-});
 
-// Middleware for handling errors
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something went wrong!');
-});
-*/
-
-//-----------------
-// Middleware for handling errors and 404
-app.use((req, res, next) => {
-    // Send the 404.html file for authenticated users if the route doesn't exist
-    console.log("404");
-    res.status(404).sendFile('404.html', { root: path.join(__dirname, 'public') });
-    // Redirect to login page if user is not authenticated
-    if (!req.user) {
-        console.log("redirect");
-        return res.redirect('/login.html');
-    }
-});
-
-// Middleware for handling other errors
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something went wrong!');
-});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

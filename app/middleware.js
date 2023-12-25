@@ -2,6 +2,11 @@
 
 const jwt = require('jsonwebtoken');
 
+// Middleware for handling errors and 404
+const test = (req, res, next) => {
+    return res.redirect('/login.html');
+};
+
 // Middleware pour extraire l'utilisateur du jeton JWT
 const extractUserMiddleware = (req, res, next) => {
     const bearerToken = req.header('Authorization');
@@ -26,4 +31,4 @@ const extractUserMiddleware = (req, res, next) => {
 };
 
 
-module.exports = { extractUserMiddleware};
+module.exports = { extractUserMiddleware, test};
